@@ -30,19 +30,20 @@ pub enum Command {
 
 mod my_module {
     use super::Command;
-
+    
     // TODO: Complete the function signature!
     pub fn transformer(input: Vec<(String,Command)>) -> Vec<String> {
         // TODO: Complete the output declaration!
         let mut output: Vec<String> = Vec::new();
         for (string, command) in input.iter() {
             // TODO: Complete the function body. You can do it!
+            // 天坑，这里command是enum的引用类型
             match command {
-                Command::Uppercase => output.push(string.to_uppercase()),
-                Command::Trim => output.push(string.trim().to_string()),
-                Command::Append(size) => {
+                &Command::Uppercase => output.push(string.to_uppercase()),
+                &Command::Trim => output.push(string.trim().to_string()),
+                &Command::Append(size) => {
                     let mut string = string.to_owned();
-                    for _ in 0..*size{
+                    for _ in 0..size{
                         string.push_str("bar");
                     }
                     output.push(string);
@@ -72,5 +73,6 @@ mod tests {
         assert_eq!(output[1], "all roads lead to rome!");
         assert_eq!(output[2], "foobar");
         assert_eq!(output[3], "barbarbarbarbarbar");
+        
     }
 }
