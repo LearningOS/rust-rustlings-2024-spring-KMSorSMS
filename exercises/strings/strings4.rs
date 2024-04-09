@@ -7,7 +7,7 @@
 //
 // No hints this time!
 
-// I AM NOT DONE
+// I AM NOT DON
 
 fn string_slice(arg: &str) {
     println!("{}", arg);
