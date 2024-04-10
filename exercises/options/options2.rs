@@ -9,7 +9,7 @@
 mod tests {
     #[test]
     fn simple_option() {
-        println!("{}",1);
+        println!("{}", 1);
         let target = "rustlings";
         let optional_target = Some(target);
 
@@ -21,7 +21,7 @@ mod tests {
 
     #[test]
     fn layered_option() {
-        println!("{}",1);
+        println!("{}", 1);
         let range = 10;
         let mut optional_integers: Vec<Option<i8>> = vec![None];
 
@@ -34,15 +34,15 @@ mod tests {
         // TODO: make this a while let statement - remember that vector.pop also
         // adds another layer of Option<T>. You can stack `Option<T>`s into
         // while let and if let.
-        while cursor != 0{
-        if let Some(integer) = optional_integers.pop() {
-            assert_eq!(integer, Some(cursor));
-            println!("{:?}",integer);
-            println!("{}",cursor);
-            cursor -= 1;
+        while let Some(integer) = optional_integers.pop() {
+            if let Some(integer) = integer {
+                assert_eq!(integer, cursor);
+                println!("{:?}", integer);
+                println!("{}", cursor);
+                cursor -= 1;
+            }
         }
-    }
-        println!("{}",cursor);
+        println!("{}", cursor);
 
         assert_eq!(cursor, 0);
     }
