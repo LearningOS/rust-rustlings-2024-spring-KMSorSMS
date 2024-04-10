@@ -24,7 +24,6 @@ mod tests {
         println!("{}", 1);
         let range = 10;
         let mut optional_integers: Vec<Option<i8>> = vec![None];
-
         for i in 1..(range + 1) {
             optional_integers.push(Some(i));
         }
@@ -34,6 +33,7 @@ mod tests {
         // TODO: make this a while let statement - remember that vector.pop also
         // adds another layer of Option<T>. You can stack `Option<T>`s into
         // while let and if let.
+        // 这里第一个integer的类型是通过匹配Some(Option<i8>)拿出来的Option<i8>,第二个是i8
         while let Some(integer) = optional_integers.pop() {
             if let Some(integer) = integer {
                 assert_eq!(integer, cursor);
