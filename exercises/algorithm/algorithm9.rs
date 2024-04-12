@@ -1,8 +1,8 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+// I AM NOT DON
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,6 +38,21 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        // 先加入尾部，然后再整理大小顺序
+        // 在这里整理大小顺序，和父节点比较，如果comparator比较时value获胜，那么需要调换
+        self.items.push(value);
+        self.count += 1;
+        let (mut val_index, mut target_index) = (self.len(), self.parent_idx(self.len()));
+        while target_index >= 1
+            && val_index >= 2
+            && (self.comparator)(&self.items[val_index], &self.items[target_index])
+        {
+            // 进行调换
+            self.items.swap(val_index, target_index);
+            // 更新索引
+            val_index = target_index;
+            target_index = self.parent_idx(val_index);
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -58,7 +73,20 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        if self.children_present(idx) && self.right_child_idx(idx) <= self.count {
+            if (self.comparator)(
+                &self.items[self.left_child_idx(idx)],
+                &self.items[self.right_child_idx(idx)],
+            ) {
+                self.left_child_idx(idx)
+            } else {
+                self.right_child_idx(idx)
+            }
+        } else if self.children_present(idx) {
+            self.left_child_idx(idx)
+        }else {
+            0
+        }
     }
 }
 
@@ -85,7 +113,29 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        // 先把堆顶和末尾交换
+        let mut bottom = self.len();
+        if bottom == 0 {
+            return None;
+        }
+        self.items.swap(1usize, bottom);
+        // 弹出
+        let result = self.items.pop();
+        self.count -= 1;
+        // 进行排序整理，从根开始，把compare赢的交换
+        let (mut unsort_idx, mut min_child) = (1usize, self.smallest_child_idx(1usize));
+        // 如果比较出来unsort的输了，说明没排序
+        while min_child != 0
+            && unsort_idx < self.len()
+            && (self.comparator)(&self.items[min_child], &self.items[unsort_idx])
+        {
+            // 交换
+            self.items.swap(unsort_idx, min_child);
+            // 更新索引
+            unsort_idx = min_child;
+            min_child = self.smallest_child_idx(unsort_idx);
+        }
+        result
     }
 }
 
@@ -129,6 +179,9 @@ mod tests {
         heap.add(2);
         heap.add(9);
         heap.add(11);
+
+        // assert_eq!(heap.items[4] ,10);
+
         assert_eq!(heap.len(), 4);
         assert_eq!(heap.next(), Some(2));
         assert_eq!(heap.next(), Some(4));
