@@ -2,7 +2,7 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
+// I AM NOT DON
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -30,6 +30,15 @@ impl Graph for UndirectedGraph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let (from_node, to_node, weight) = edge;
+        self.adjacency_table.entry(from_node.to_owned()).or_insert(Vec::new());
+        self.adjacency_table.entry(to_node.to_owned()).or_insert(Vec::new());
+        if let Some(edges) = self.adjacency_table.get_mut(from_node) {
+            edges.push((to_node.to_string(), weight));
+        }
+        if let Some(edges) = self.adjacency_table.get_mut(to_node) {
+            edges.push((from_node.to_string(), weight));
+        }
     }
 }
 pub trait Graph {
@@ -77,6 +86,7 @@ mod test_undirected_graph {
             (&String::from("b"), &String::from("c"), 10),
             (&String::from("c"), &String::from("b"), 10),
         ];
+        // assert_eq!(graph.edges()[5],(&String::from("a"), &String::from("b"), 5));
         for edge in expected_edges.iter() {
             assert_eq!(graph.edges().contains(edge), true);
         }
